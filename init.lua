@@ -47,7 +47,6 @@ local function amg_generate(minp, maxp, seed, vm, emin, emax)
 	local cave = minetest.get_perlin(3456, 6, 0.5, 360) -- cave
 	--local laca = minetest.get_perlin(1278, 6, 0.5, 360) -- lava cave
 	local nizx = 0
-	local nizx = 0
 	for z = minp.z, maxp.z do
 	for x = minp.x, maxp.x do
 		nizx = nizx + 1
@@ -85,6 +84,24 @@ local function amg_generate(minp, maxp, seed, vm, emin, emax)
 			end
 		end
 		
+	end
+	end
+	
+	--tree planting
+	local nizx = 0
+	for z = minp.z, maxp.z do
+	for x = minp.x, maxp.x do
+		nizx = nizx + 1
+		local base_ = math.ceil((base[nizx] * -30) + wl + 10 + (moun[nizx] * 15))
+		local temp_ = 0
+		local humi_ = 0
+		if base_ > 95 then
+			temp_ = 0.10
+			humi_ = 90
+		else
+			temp_ = math.abs(temp[nizx] * 2)
+			humi_ = math.abs(humi[nizx] * 100)
+		end
 		local biome__ = biome.list[biome.get_by_temp_humi(temp_,humi_)[1]]
 		local tr = biome__.trees
 		local filled = false
@@ -118,13 +135,6 @@ local function amg_generate(minp, maxp, seed, vm, emin, emax)
 		end
 	end
 	end
-	
-	--[[
-	for i = 1, #biome.spawntree do
-		local st = biome.spawntree
-		tree.spawn(st[i][1],st[i][2],data,area,seed)
-	end
-	--]]	
 	
 	vm:set_data(data)
 	vm:set_lighting({day=0, night=0})

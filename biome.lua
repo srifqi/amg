@@ -209,7 +209,11 @@ badd({
 			if y < wl then
 				return c_dirt
 			else
-				return c_dirt_grass
+				if temp > 1 and (base == wl or base == wl+1) then
+					return c_sand
+				else
+					return c_dirt_grass
+				end
 			end
 		end
 	end
@@ -312,7 +316,11 @@ badd({
 			if y < wl then
 				return c_dirt
 			else
-				return c_dirt_savanna
+				if temp > 1.7 and base == wl then
+					return c_sand
+				else
+					return c_dirt_savanna
+				end
 			end
 		end
 	end

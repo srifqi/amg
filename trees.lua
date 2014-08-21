@@ -44,20 +44,15 @@ tree.register({
 	maxh = 85,
 	grows_on = "default:dirt_with_grass",
 	grow = function(pos, data, area, seed, minp, maxp, pr)
-		local x, y_, z = pos.x, pos.y, pos.z
+		local x, y, z = pos.x, pos.y, pos.z
 		local th = pr:next(4,5)
-		local y = y_ + th - 1
 		
-		for xx = math.max(x-2,minp.x), math.min(x+2,maxp.x) do
-		for yy = math.max(y-2,minp.y), math.min(y+2,maxp.y) do
-		for zz = math.max(z-2,minp.z), math.min(z+2,maxp.z) do
-			if pr:next(1,100) <= 20 then
-				local vi = area:index(xx, yy, zz)
-				add_leaves(data, vi, c_leaves, c_leaves)
-			end
+		for yy = math.max(y,minp.y), math.min(y+th,maxp.y) do
+			local vi = area:index(x, yy, z)
+			data[vi] = c_tree
 		end
-		end
-		end
+		
+		local y = y + th - 1
 		
 		for xx = math.max(x-1,minp.x), math.min(x+1,maxp.x) do
 		for yy = math.max(y-1,minp.y), math.min(y+1,maxp.y) do
@@ -68,9 +63,12 @@ tree.register({
 		end
 		end
 		
-		for yy = math.max(y_,minp.y), math.min(y_+th,maxp.y) do
-			local vi = area:index(x, yy, z)
-			data[vi] = c_tree
+		for ii = 1, 8 do
+			local xx = x + pr:next(-2,2)
+			local yy = y + pr:next(-2,2)
+			local zz = z + pr:next(-2,2)
+			local vi = area:index(xx, yy, zz)
+			add_leaves(data, vi, c_leaves, c_leaves)
 		end
 		
 		--print("normal tree spawned at:"..x..","..y..","..z)
@@ -97,23 +95,19 @@ tree.register({
 		for xx = math.max(x-1,minp.x), math.min(x+1,maxp.x) do
 		for yy = math.max(y-1,minp.y), math.min(y+1,maxp.y) do
 		for zz = math.max(z-1,minp.z), math.min(z+1,maxp.z) do
-			if (yy ~= y and xx ~= x and zz ~= z) or yy ~= y-1 then
-				local vi = area:index(xx, yy, zz)
-				add_leaves(data, vi, c_leaves)
-			end
+			local vi = area:index(xx, yy, zz)
+			add_leaves(data, vi, c_leaves)
 		end
 		end
 		end
 		
-		for xx = math.max(x-2,minp.x), math.min(x+2,maxp.x) do
-		for yy = math.max(y-2,minp.y), math.min(y+2,maxp.y) do
-		for zz = math.max(z-2,minp.z), math.min(z+2,maxp.z) do
-			if ((yy ~= y and xx ~= x and zz ~= z) or yy ~= y-1) and pr:next(1,100) <= 20 then
-				local vi = area:index(xx, yy, zz)
-				add_leaves(data, vi, c_leaves, c_leaves)
-			end
-		end
-		end
+		for ii = 1, 12 do
+			local xx = x + pr:next(-2,2)
+			local yy = y + pr:next(-2,2)
+			local zz = z + pr:next(-2,2)
+			
+			local vi = area:index(xx, yy, zz)
+			add_leaves(data, vi, c_leaves, c_leaves)
 		end
 		
 		--print("savanna tree spawned at:"..x..","..y..","..z)
@@ -131,36 +125,32 @@ tree.register({
 		local x, y, z = pos.x, pos.y, pos.z
 		local th = pr:next(5,8)
 		
-		for xx = math.max(x-2,minp.x), math.min(x+2,maxp.x) do
-		for zz = math.max(z-2,minp.z), math.min(z+2,maxp.z) do
-			if xx ~= x and zz ~= z then
-				local vi = area:index(xx, y+3, zz)
-				add_leaves(data, vi, c_leaves)
-				local vi = area:index(xx, y+4, zz)
-				data[vi] = c_snow
-			end
-		end
+		for yy = math.max(y,minp.y), math.min(y+th,maxp.y) do
+			local vi = area:index(x, yy, z)
+			data[vi] = c_tree
 		end
 		
-		for xx = math.max(x-1,minp.x), math.min(x+1,maxp.x) do
-		for zz = math.max(z-1,minp.z), math.min(z+1,maxp.z) do
-			if xx ~= x and zz ~= z then
-				local vi = area:index(xx, y+th, zz)
-				add_leaves(data, vi, c_leaves)
-				local vi = area:index(xx, y+th+1, zz)
-				data[vi] = c_snow
-			end
+		for xx = math.max(x-2,minp.x), math.min(x+2,maxp.x) do
+		for zz = math.max(z-2,minp.z), math.min(z+2,maxp.z) do
+			local vi = area:index(xx, y+3, zz)
+			add_leaves(data, vi, c_leaves)
+			local vi = area:index(xx, y+4, zz)
+			add_leaves(data, vi, c_snow)
 		end
 		end
 		
 		local vi = area:index(x, y+th+1, z)
 		add_leaves(data, vi, c_leaves)
 		local vi = area:index(x, y+th+2, z)
-		data[vi] = c_snow
+		add_leaves(data, vi, c_snow)
 		
-		for yy = math.max(y,minp.y), math.min(y+th,maxp.y) do
-			local vi = area:index(x, yy, z)
-			data[vi] = c_tree
+		for xx = math.max(x-1,minp.x), math.min(x+1,maxp.x) do
+		for zz = math.max(z-1,minp.z), math.min(z+1,maxp.z) do
+			local vi = area:index(xx, y+th, zz)
+			add_leaves(data, vi, c_leaves)
+			local vi = area:index(xx, y+th+1, zz)
+			add_leaves(data, vi, c_snow)
+		end
 		end
 		
 		--print("pine tree spawned at:"..x..","..y..","..z)
@@ -178,6 +168,11 @@ tree.register({
 		local x, y, z = pos.x, pos.y, pos.z
 		local th = pr:next(5,8)
 		
+		for yy = math.max(y,minp.y), math.min(y+th,maxp.y) do
+			local vi = area:index(x, yy, z)
+			data[vi] = c_tree
+		end
+		
 		for xx = math.max(x-2,minp.x), math.min(x+2,maxp.x) do
 		for zz = math.max(z-2,minp.z), math.min(z+2,maxp.z) do
 			local vi = area:index(xx, y+3, zz)
@@ -194,11 +189,6 @@ tree.register({
 		
 		local vi = area:index(x, y+th+1, z)
 		add_leaves(data, vi, c_leaves)
-		
-		for yy = math.max(y,minp.y), math.min(y+th,maxp.y) do
-			local vi = area:index(x, yy, z)
-			data[vi] = c_tree
-		end
 		
 		--print("pine tree spawned at:"..x..","..y..","..z)
 	end
@@ -348,8 +338,10 @@ tree.register({
 			for u = -1, 1 do
 			for i = -1, 1 do
 			for o = 0, h do
-				local vi = area:index(x+u, y+o, z+i)
-				data[vi] = c_ice
+				if data[area:index(x+u, y-1, z+i)] == c_dirt_with_snow then
+					local vi = area:index(x+u, y+o, z+i)
+					data[vi] = c_ice
+				end
 			end
 			end
 			end
@@ -357,8 +349,10 @@ tree.register({
 			for u = 0, 1 do
 			for i = -1, 0 do
 			for o = h, j do
-				local vi = area:index(x+u, y+o, z+i)
-				data[vi] = c_ice
+				if data[area:index(x+u, y-1, z+i)] == c_dirt_with_snow then
+					local vi = area:index(x+u, y+o, z+i)
+					data[vi] = c_ice
+				end
 			end
 			end
 			end
