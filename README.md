@@ -3,6 +3,8 @@ amg
 
 Another Map Generator mod for Minetest
 
+Still experimental!
+
 
 ##Feature
 - 12 biome

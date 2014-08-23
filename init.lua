@@ -24,6 +24,15 @@ local function get_perlin_map(seed, octaves, persistance, scale, minp, maxp)
 	return pm:get2dMap_flat({x = minp.x, y = minp.z, z = 0})
 end
 
+-- noiseparam
+np = {
+--	s = seed, o = octaves, p = persistance, c = scale
+	b = {s = 1234, o = 6, p = 0.5, c = 512},
+	m = {s = 4321, o = 6, p = 0.5, c = 256},
+	t = {s = 5678, o = 7, p = 0.5, c = 512},
+	h = {s = 8765, o = 7, p = 0.5, c = 512}
+}
+
 --node id?
 local gci = minetest.get_content_id
 local c_air = gci("air")
@@ -40,10 +49,10 @@ local function amg_generate(minp, maxp, seed, vm, emin, emax)
 	}
 	local data = vm:get_data()
 	local sidelen = maxp.x - minp.x + 1
-	local base = get_perlin_map(1234, 6, 0.5, 256, minp, maxp) -- base height
-	local moun = get_perlin_map(4321, 6, 0.5, 256, minp, maxp) -- addition
-	local temp = get_perlin_map(5678, 7, 0.5, 512, minp, maxp) -- temperature (0-2)
-	local humi = get_perlin_map(8765, 7, 0.5, 512, minp, maxp) -- humidity (0-100)
+	local base = get_perlin_map(np.b.s, np.b.o, np.b.p, np.b.c, minp, maxp) -- base height
+	local moun = get_perlin_map(np.m.s, np.m.o, np.m.p, np.m.c, minp, maxp) -- addition
+	local temp = get_perlin_map(np.t.s, np.t.o, np.t.p, np.t.c, minp, maxp) -- temperature (0-2)
+	local humi = get_perlin_map(np.h.s, np.h.o, np.h.p, np.h.c, minp, maxp) -- humidity (0-100)
 	local cave = minetest.get_perlin(3456, 6, 0.5, 360) -- cave
 	--local laca = minetest.get_perlin(1278, 6, 0.5, 360) -- lava cave
 	local nizx = 0
@@ -94,13 +103,11 @@ local function amg_generate(minp, maxp, seed, vm, emin, emax)
 		nizx = nizx + 1
 		local base_ = math.ceil((base[nizx] * -30) + wl + 10 + (moun[nizx] * 15))
 		local temp_ = 0
-		local humi_ = 0
+		local humi_ = math.abs(humi[nizx] * 100)
 		if base_ > 95 then
 			temp_ = 0.10
-			humi_ = 90
 		else
 			temp_ = math.abs(temp[nizx] * 2)
-			humi_ = math.abs(humi[nizx] * 100)
 		end
 		local biome__ = biome.list[biome.get_by_temp_humi(temp_,humi_)[1]]
 		local tr = biome__.trees

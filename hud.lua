@@ -7,8 +7,8 @@ minetest.register_globalstep(function(dtime)
 		local pos = player:getpos()
 		local name = player:get_player_name()
 		
-		local base = minetest.get_perlin(1234, 6, 0.5, 256):get2d({x=pos.x,y=pos.z})
-		local moun = minetest.get_perlin(4321, 6, 0.5, 256):get2d({x=pos.x,y=pos.z})
+		local base = minetest.get_perlin(np.b.s, np.b.o, np.b.p, np.b.c):get2d({x=pos.x,y=pos.z})
+		local moun = minetest.get_perlin(np.m.s, np.m.o, np.m.p, np.m.c):get2d({x=pos.x,y=pos.z})
 		local base = math.ceil((base * -30) + wl + 10 + (moun * 15))
 		local temp = 0
 		local humi = 0
@@ -16,8 +16,8 @@ minetest.register_globalstep(function(dtime)
 			temp = 0.05
 			humi = 0.9
 		else
-			temp = minetest.get_perlin(5678, 7, 0.5, 512):get2d({x=pos.x,y=pos.z})
-			humi = minetest.get_perlin(8765, 7, 0.5, 512):get2d({x=pos.x,y=pos.z})
+			temp = minetest.get_perlin(np.t.s, np.t.o, np.t.p, np.t.c):get2d({x=pos.x,y=pos.z})
+			humi = minetest.get_perlin(np.h.s, np.h.o, np.h.p, np.h.c):get2d({x=pos.x,y=pos.z})
 		end
 		
 		local biometext = biome.get_by_temp_humi(math.abs(temp*2),math.abs(humi*100))[2]
@@ -29,8 +29,8 @@ minetest.register_globalstep(function(dtime)
 				hud_elem_type = "text",
 				name = "Biome",
 				number = 0xFFFFFF,
-				position = {x=1, y=1},
-				offset = {x=-130, y=-80},
+				position = {x=0, y=1},
+				offset = {x=13, y=-80},
 				direction = 0,
 				text = "Biome: "..biometext,
 				scale = {x=200, y=60},
