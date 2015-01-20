@@ -1,6 +1,10 @@
 amg
 ===
 
+NO MORE DEVELOPMENT
+
+Recent development about this mapgen: [amgmt](https://github.com/srifqi/amgmt)
+
 Another Map Generator mod for Minetest
 
 Still experimental!
